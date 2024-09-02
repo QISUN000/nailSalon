@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-scroll';
 import './App.css'
 import Image from './assets/bg.jpg'
+import Image2 from './assets/image2.png'
 import Manicure from './assets/manicure.png'
 import Coffee from './assets/coffee.png'
 import Pedicure from './assets/pedicure.png'
@@ -9,11 +10,12 @@ import Coctails from './assets/coctails.png'
 import { IoIosMenu, IoIosClose } from 'react-icons/io';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import Carousel from './components/carousel';
 
 function App() {
   AOS.init({
     duration: 700,
-    once:true
+    once: true
   });
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -44,11 +46,11 @@ function App() {
           <div className='lg:flex lg:flex-1 items-center justify-end hidden'>
 
             <ul data-aos="fade-down" data-aos-delay="100" className="flex gap-10 xl:gap-20 xl:mr-16 text-2xl ">
-              <Link  className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" spy={true} smooth={true} to="Services"><li>Services
-            
-                </li></Link>
-              <Link  className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" spy={true} smooth={true} to="Contacts"><li>Contacts</li></Link>
-              <Link  className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current"  spy={true} smooth={true} to="Locations"><li>Locations</li></Link>
+              <Link className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" spy={true} smooth={true} to="Services"><li>Services
+
+              </li></Link>
+              <Link className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" spy={true} smooth={true} to="Contacts"><li>Contacts</li></Link>
+              <Link className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" spy={true} smooth={true} to="Locations"><li>Locations</li></Link>
             </ul>
 
           </div>
@@ -77,7 +79,7 @@ function App() {
       </div >
 
       {/* Services Section */}
-      <section name="Services" className="py-16 mx-auto relative grid grid-cols-12 grid-rows-12 max-h-[2000px] w-4/5 my-26">
+      <section name="Services" className="py-16 mx-auto relative grid grid-cols-12 grid-rows-12 max-h-[2000px] w-10/12 ">
         {/* Background lines */}
 
         <div className="w-px col-start-4 row-start-1 row-end-11 bg-gray-200"></div>
@@ -132,6 +134,33 @@ function App() {
         </div>
 
       </section>
+
+      {/* Our Creations */}
+      <div >
+        <div className='w-10/12 flex mx-auto items-center justify-between'>
+          <div>
+            <h2 className="text-5xl mb-2 relative z-10">Our Creations</h2>
+            <p className="text-xl text-gray-600 mb-12 relative z-10">Capture Elegance</p>
+          </div>
+          <div>
+            <p className='text-xl'>We create the perfect  <br />blend of beauty and blisss</p>
+          </div>
+        </div>
+        <Carousel />
+      </div>
+
+      <div className='mx-auto flex w-2/5 flex-col items-center mt-20 mb-20'>
+          <div>
+            <p>Sip. Relax. Beautify.</p>
+            <h2>Nails Salons</h2>
+          </div>
+          <img src={Image2} alt="Pedicure" className="object-cover w-1/2" />
+          <div>
+            <p>Get yourself 15% Discount and<br /> a FREE Cocktail on the first visit, <br /> when you book online.</p>
+            <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">PLAN YOUR VISIT</button>
+          </div>
+      </div>
+
     </div>
   )
 }
