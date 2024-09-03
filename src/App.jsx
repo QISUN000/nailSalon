@@ -8,6 +8,9 @@ import Coffee from './assets/coffee.png'
 import Pedicure from './assets/pedicure.png'
 import Coctails from './assets/coctails.png'
 import { IoIosMenu, IoIosClose } from 'react-icons/io';
+import { FaInstagram } from "react-icons/fa";
+import { RiFacebookBoxLine } from "react-icons/ri";
+import { TbBrandTiktok } from "react-icons/tb";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Carousel from './components/carousel';
@@ -79,64 +82,65 @@ function App() {
       </div >
 
       {/* Services Section */}
-      <section name="Services" className="py-16 mx-auto relative grid grid-cols-12 grid-rows-12 max-h-[2000px] w-10/12 ">
-        {/* Background lines */}
+      <section name="Services" className="py-16 mx-auto w-10/12 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12  lg:gap-0">
+          {/* Background lines - visible only on large screens */}
+          <div className="hidden lg:block w-px lg:col-start-4 lg:row-start-1 lg:row-end-5 bg-gray-200 "></div>
+          <div className="hidden lg:block w-px lg:col-end-9 lg:row-start-2 lg:row-end-6 bg-gray-200 "></div>
 
-        <div className="w-px col-start-4 row-start-1 row-end-11 bg-gray-200"></div>
-        <div className="w-px col-end-9 row-start-2 row-end-12  bg-gray-200"></div>
+        
+          <div data-aos="fade-up" className='lg:col-end-11 lg:col-span-3 flex flex-col items-start justify-center z-0  lg:mb-10  '>
+            <h2 className="text-4xl lg:text-5xl mb-2 z-10">Our Services</h2>
+            <p className="text-lg lg:text-xl text-gray-600  z-10">Indulge and Shine</p>
+          </div>
 
+          {/* manicure */}
+          <div data-aos="fade-up" data-aos-delay="100" className='lg:col-start-1 lg:col-end-5 lg:row-start-2 z-10 font-normal '>
+            <img src={Manicure} alt="Manicure" className="object-cover w-full" />
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
+              <span className="text-2xl mb-2 sm:mb-0">Manicure</span>
+              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</button>
+            </div>
+          </div>
 
-        <div data-aos="fade-up" className='col-end-11 col-span-3 row-span-1 flex flex-col items-start justify-center z-0'>
-          <h2 className="text-5xl mb-2 relative z-10">Our Services</h2>
-          <p className="text-xl text-gray-600 mb-12 relative z-10">Indulge and Shine</p>
-        </div>
+          {/* Cocktails */}
+          <div data-aos="fade-up" data-aos-delay="200" className='lg:col-end-11 lg:col-span-3 lg:row-start-2  font-normal'>
+            <img src={Coctails} alt="Cocktails" className="object-cover w-full" />
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
+              <span className="text-2xl mb-2 sm:mb-0">Cocktails</span>
+              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Menu →</button>
+            </div>
+          </div>
+          
 
-        {/* manicure */}
-        <div data-aos="fade-up" data-aos-delay="100" className='col-start-1 col-end-5 row-start-2 row-end-5 z-10 font-normal'>
-          <img src={Manicure} alt="Manicure" className="object-cover" />
-          <div className="flex justify-between items-center mt-5">
-            <span className="text-2xl">Manicure</span>
-            <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</button>
+          {/* Coffee */}
+          <div data-aos="fade-up" className='lg:col-end-7 lg:col-span-3 lg:row-start-4 font-normal'>
+            <img src={Coffee} alt="Coffee" className="object-cover w-full" />
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
+              <span className="text-2xl mb-2 sm:mb-0">Coffee</span>
+              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Menu →</button>
+            </div>
+          </div>
+
+          {/* Pedicure */}
+          <div data-aos="fade-up" data-aos-delay="100" className='lg:col-end-12 lg:col-span-3 lg:row-start-5 font-normal'>
+            <img src={Pedicure} alt="Pedicure" className="object-cover w-full" />
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
+              <span className="text-2xl mb-2 sm:mb-0">Pedicure</span>
+              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</button>
+            </div>
+          </div>
+
+          <div data-aos="fade-up" data-aos-delay="100" className='lg:col-start-1 lg:col-end-5 lg:row-start-5 z-10 flex items-center mt-8 lg:mt-0'>
+            <p className="text-lg lg:text-xl max-w-2xl mx-auto text-left">
+              Our commitment to quality service and customer satisfaction ensures you leave feeling rejuvenated and fabulous.
+            </p>
           </div>
         </div>
-
-        {/* Cocktails */}
-        <div data-aos="fade-up" data-aos-delay="200" className=' col-end-11 col-span-3 row-start-2 row-end-6 font-normal'>
-          <img src={Coctails} alt="Cocktails" className="object-cover" />
-          <div className="flex justify-between items-center mt-5">
-            <span className="text-2xl">Cocktails</span>
-            <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Menu →</button>
-          </div>
-        </div>
-
-        {/* Coffee */}
-        <div data-aos="fade-up" className='col-end-7 col-span-3 row-start-7 font-normal'>
-          <img src={Coffee} alt="Coffee" className="object-cover" />
-          <div className="flex justify-between items-center mt-5">
-            <span className="text-2xl">Coffee</span>
-            <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Menu →</button>
-          </div>
-        </div>
-
-        {/* Pedicure */}
-        <div data-aos="fade-up" data-aos-delay="100" className='col-end-12 col-span-3 row-start-8 font-normal'>
-          <img src={Pedicure} alt="Pedicure" className="object-cover" />
-          <div className="flex justify-between items-center mt-5">
-            <span className="text-2xl">Pedicure</span>
-            <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</button>
-          </div>
-        </div>
-
-        <div data-aos="fade-up" data-aos-delay="100" className='col-start-1 col-end-5 row-start-12 z-10 flex items-center '>
-          <p className="text-xl  max-w-2xl mx-auto text-left">
-            Our commitment to quality service and customer satisfaction ensures you leave feeling rejuvenated and fabulous.
-          </p>
-        </div>
-
       </section>
 
       {/* Our Creations */}
-      <div >
+      <div className='mt-28'>
         <div className='w-10/12 flex mx-auto items-center justify-between'>
           <div>
             <h2 className="text-5xl mb-2 relative z-10">Our Creations</h2>
@@ -149,16 +153,40 @@ function App() {
         <Carousel />
       </div>
 
-      <div className='mx-auto flex w-2/5 flex-col items-center mt-20 mb-20'>
-          <div>
-            <p>Sip. Relax. Beautify.</p>
-            <h2>Nails Salons</h2>
+      {/* plan you visit */}
+      <div className="mx-auto flex w-full md:w-3/5 lg:w-2/5 flex-col items-center mt-24 mb-16 lg:mt-56 lg:mb-28 relative px-4">
+  <div className="absolute z-10 top-[-60px] lg:top-[-90px] text-center">
+    <p className="text-lg md:text-xl">Sip. Relax. Beautify.</p>
+    <h2 className="text-6xl lg:text-7xl xl:text-8xl">Nails Salons</h2>
+  </div>
+  <img src={Image2} alt="Pedicure" className="object-cover w-3/4 md:w-2/3 lg:w-1/2" />
+  <div className="py-6 md:py-10 flex-col flex justify-center items-center">
+    <p className="text-lg md:text-xl text-center">Get yourself 15% Discount and<br /> a FREE Cocktail on the first visit,<br /> when you book online.</p>
+    <button className="mt-4 text-lg md:text-2xl border border-black px-6 py-3 md:px-8 md:py-4 rounded-full hover:bg-black hover:text-white transition duration-300">
+      PLAN YOUR VISIT
+    </button>
+  </div>
+</div>
+
+      {/* footer */}  
+      <div className='w-10/12 border-t border-gray-200 py-20 mx-auto'>
+        <div className='grid grid-cols-1 sm:grid-cols-5 gap-4'>
+          <div className='sm:col-start-2 sm:col-span-1 mb-6 sm:mb-0'>
+            <h2 className='font-medium text-2xl mb-2'>Contacts</h2>
+            <p className='mb-1'>(555) 867-5309</p>
+            <p className='mb-3'>harmonystudio@gmail.com</p>
+            <div className='flex space-x-3'>
+              <FaInstagram className='text-2xl' />
+              <RiFacebookBoxLine className='text-2xl' />
+              <TbBrandTiktok className='text-2xl' />
+            </div>
           </div>
-          <img src={Image2} alt="Pedicure" className="object-cover w-1/2" />
-          <div>
-            <p>Get yourself 15% Discount and<br /> a FREE Cocktail on the first visit, <br /> when you book online.</p>
-            <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">PLAN YOUR VISIT</button>
+          <div className='sm:col-start-4 sm:col-span-1'>
+            <h2 className='font-medium text-2xl mb-2'>Address</h2>
+            <p>Springfield, 62704</p>
+            <p>123 Maple Street</p>
           </div>
+        </div>
       </div>
 
     </div>
