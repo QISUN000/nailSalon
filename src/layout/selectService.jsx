@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import Header from "../components/Header"
+import { useNavigate } from 'react-router-dom';
+import { useBooking } from '../BookingContext';
 import ServiceTabs from "../components/ServiceTabs"
 import ServiceList from "../components/ServiceList"
 import SidePanel from "../components/SidePanel"
 import axios from "axios"
 import Image2 from '../assets/image2.png'
 
-const selectService = () => {
+const SelectService = () => {
+  const navigate = useNavigate();
+  const { selectedServices, setSelectedServices } = useBooking();
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState('');
-  const [selectedServices, setSelectedServices] = useState([]);
   const salonInfo = {
     name: "Bicolor Los Feliz",
     image: Image2,
@@ -23,11 +26,15 @@ const selectService = () => {
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get("http://localhost:8080/api/categories");
-    const categoriesData = result.data;
-    console.log(categoriesData)
-    setCategories(categoriesData);
-    setActiveCategory(categoriesData[0]?.name || '');
+    try {
+      const result = await axios.get("http://localhost:8080/api/categories");
+      const categoriesData = result.data;
+      console.log(categoriesData);
+      setCategories(categoriesData);
+      setActiveCategory(categoriesData[0]?.name || '');
+    } catch (error) {
+      console.error("Error loading categories:", error);
+    }
   }
 
   const handleServiceSelect = (service) => {
@@ -42,7 +49,7 @@ const selectService = () => {
   };
 
   const handleContinue = () => {
-    console.log('Continuing with selected services:', selectedServices);
+    navigate('/layout/professionals');
   };
 
   return (
@@ -72,6 +79,7 @@ const selectService = () => {
               salonInfo={salonInfo}
               selectedServices={selectedServices}
               onContinue={handleContinue}
+              currentPage="selectService"
             />
           </div>
         </aside>
@@ -80,4 +88,4 @@ const selectService = () => {
   )
 }
 
-export default selectService
+export default SelectService;

@@ -1,12 +1,23 @@
 import React from 'react';
 import { Star } from 'lucide-react';
+import { format } from 'date-fns';
 
-const SidePanel = ({ salonInfo, selectedServices, onContinue }) => {
-  const totalPrice = selectedServices.reduce((sum, service) => sum + service.price, 0);
+const SidePanel = ({ salonInfo, selectedServices, selectedProfessional, selectedDate, selectedTime, onContinue, currentPage }) => {
+  const servicePrice = selectedServices.reduce((sum, service) => sum + service.price, 0);
+  const professionalPrice = selectedProfessional ? selectedProfessional.price : 0;
+  const totalPrice = Math.max(servicePrice, professionalPrice);
+
   const totalDuration = selectedServices.reduce((sum, service) => {
     const [minDuration] = service.duration.split(' - ');
     return sum + parseInt(minDuration);
   }, 0);
+
+  const isButtonDisabled = () => {
+    if (currentPage === 'selectService') return selectedServices.length === 0;
+    if (currentPage === 'selectProfessional') return !selectedProfessional;
+    if (currentPage === 'selectTime') return !selectedDate || !selectedTime;
+    return false;
+  };
 
   return (
     <div className="bg-white shadow-md md:rounded-lg overflow-hidden">
@@ -23,6 +34,14 @@ const SidePanel = ({ salonInfo, selectedServices, onContinue }) => {
           </div>
         </div>
 
+        {selectedDate && selectedTime && (
+          <div className="border-t pt-4 mb-4">
+            <h4 className="font-semibold mb-2">Selected Time</h4>
+            <p className="text-sm">{format(selectedDate, 'EEEE d MMMM')}</p>
+            <p className="text-sm">{selectedTime}</p>
+          </div>
+        )}
+
         {selectedServices.length > 0 && (
           <div className="border-t pt-4 mb-4">
             <h4 className="font-semibold mb-2">Selected Services</h4>
@@ -34,6 +53,23 @@ const SidePanel = ({ salonInfo, selectedServices, onContinue }) => {
             ))}
           </div>
         )}
+
+        {selectedProfessional && (
+          <div className="border-t pt-4 mb-4">
+            <h4 className="font-semibold mb-2">Selected Professional</h4>
+            <div className="flex items-center">
+              <img 
+                src={`http://localhost:8080${selectedProfessional.imageUrl}`}
+                alt={selectedProfessional.name} 
+                className="w-10 h-10 rounded-full object-cover mr-2"
+              />
+              <div>
+                <p className="text-sm font-medium">{selectedProfessional.name}</p>
+                <p className="text-sm text-gray-500">{selectedProfessional.role}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="bg-gray-50 p-4">
@@ -41,10 +77,14 @@ const SidePanel = ({ salonInfo, selectedServices, onContinue }) => {
           <span className="font-semibold">Total</span>
           <span className="font-semibold">from US${totalPrice}</span>
         </div>
-        <p className="text-sm text-gray-500 mb-4">{selectedServices.length} service • {totalDuration} mins - {totalDuration + 30} mins</p>
+        <p className="text-sm text-gray-500 mb-4">
+          {selectedServices.length} service{selectedServices.length !== 1 ? 's' : ''} • 
+          {totalDuration} mins - {totalDuration + 30} mins
+        </p>
         <button
-          className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
+          className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
           onClick={onContinue}
+          disabled={isButtonDisabled()}
         >
           Continue
         </button>
