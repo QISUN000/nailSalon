@@ -10,6 +10,7 @@ import SelectService from './layout/selectService.jsx'
 import Professionals from './layout/professionals.jsx';
 import { BookingProvider } from './BookingContext';
 import SelectTime from './layout/SelectTime.jsx';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const router = createBrowserRouter([
   {
@@ -38,8 +39,12 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <GoogleOAuthProvider clientId="893443404226-p3je197e46vbj5itdum0nfqi2jsv4qgo.apps.googleusercontent.com">
     <BookingProvider>
+    
       <RouterProvider router={router} />
+     
     </BookingProvider>
+    </GoogleOAuthProvider>
   </StrictMode>
 )

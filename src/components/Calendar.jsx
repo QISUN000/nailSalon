@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isAfter, startOfDay } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isAfter, startOfDay, isBefore } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Calendar = ({ onDateSelect, selectedDate, unavailableDates = [] }) => {
@@ -17,7 +17,6 @@ const Calendar = ({ onDateSelect, selectedDate, unavailableDates = [] }) => {
   const monthEnd = endOfMonth(currentMonth);
   const monthDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
-  // Add padding days to start of month
   const firstDayOfMonth = monthStart.getDay();
   const paddingDays = Array(firstDayOfMonth).fill(null);
 
@@ -29,7 +28,7 @@ const Calendar = ({ onDateSelect, selectedDate, unavailableDates = [] }) => {
 
   const isDateDisabled = (date) => {
     const today = startOfDay(new Date());
-    return !isAfter(date, today) || isDateUnavailable(date);
+    return isBefore(date, today) || isDateUnavailable(date);
   };
 
   return (
@@ -64,7 +63,7 @@ const Calendar = ({ onDateSelect, selectedDate, unavailableDates = [] }) => {
               className={`p-2 text-center rounded-full ${
                 !isCurrentMonth ? 'text-gray-300' :
                 isDisabled ? 'text-gray-300 cursor-not-allowed' :
-                isSelected ? 'bg-purple-500 text-white' :
+                isSelected ? 'bg-blue-500 text-white' :
                 'hover:bg-gray-200'
               }`}
             >

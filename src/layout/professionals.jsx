@@ -38,6 +38,12 @@ const Professionals = () => {
     navigate('/layout/selecttime');
   };
 
+  useEffect(() => {
+    if (professionals.length > 0 && !selectedProfessional) {
+      setSelectedProfessional(professionals[0]);
+    }
+  }, [professionals, selectedProfessional, setSelectedProfessional]);
+
   return (
 
     <div>
