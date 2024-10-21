@@ -1,37 +1,66 @@
 import React, { useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin } from '@react-oauth/google';
+import { checkEmail, login, register, googleLogin, setAuthToken } from '../api/api';
 
 const LoginModal = ({ isOpen, onClose, onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     const [step, setStep] = useState('email');
+    const [error, setError] = useState('');
 
     if (!isOpen) return null;
 
-    const checkUserExists = async (email) => {
-        // This should be replaced with an actual API call
-        // For now, we'll simulate a check
-        return new Promise(resolve => setTimeout(() => resolve(Math.random() > 0.5), 500));
+    const handleSuccessfulLogin = (method, email, token, role) => {
+        setAuthToken(token);
+        onLogin(method, email, token, role);
+        onClose();
     };
 
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
-        const userExists = await checkUserExists(email);
-        setStep(userExists ? 'password' : 'signup');
+        setError('');
+        try {
+            const exists = await checkEmail(email);
+            setStep(exists ? 'password' : 'signup');
+        } catch (error) {
+            setError('Error checking email. Please try again.');
+        }
     };
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        // Here you would typically send a login request to your backend
-        console.log('Logging in with:', email, password);
-        onLogin('email', email);
+        setError('');
+        try {
+            const data = await login(email, password);
+            handleSuccessfulLogin('email', email, data.accessToken, data.role);
+        } catch (error) {
+            setError('Invalid email or password. Please try again.');
+        }
     };
 
-    const handleSignUp = () => {
-        // Redirect to sign up page or show sign up form
-        console.log('Redirecting to sign up with email:', email);
-        onLogin('signup', email);
+    const handleSignUp = async (e) => {
+        e.preventDefault();
+        setError('');
+        try {
+            await register(email, password, name);
+            // After successful registration, log in the user
+            const loginData = await login(email, password);
+            handleSuccessfulLogin('signup', email, loginData.accessToken, loginData.role);
+        } catch (error) {
+            setError('Error signing up. Please try again.');
+        }
+    };
+
+    const handleGoogleLogin = async (credentialResponse) => {
+        try {
+            const decoded = jwtDecode(credentialResponse.credential);
+            const data = await googleLogin(credentialResponse.credential);
+            handleSuccessfulLogin('google', decoded.email, data.accessToken, 'CUSTOMER');
+        } catch (error) {
+            setError('Error with Google login. Please try again.');
+        }
     };
 
     const renderEmailStep = () => (
@@ -74,15 +103,31 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
     );
 
     const renderSignUpStep = () => (
-        <div>
-            <p className="mb-2">No account found for {email}. Would you like to sign up?</p>
+        <form onSubmit={handleSignUp}>
+            <p className="mb-2">Create an account for {email}</p>
+            <input
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md mb-3"
+                required
+            />
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md mb-3"
+                required
+            />
             <button
-                onClick={handleSignUp}
+                type="submit"
                 className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
             >
                 Sign Up
             </button>
-        </div>
+        </form>
     );
 
     return (
@@ -96,16 +141,13 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
                 </div>
                 <p className="text-gray-600 mb-4">Log in or sign up to complete your booking</p>
 
+                {error && <p className="text-red-500 mb-4">{error}</p>}
+
                 <GoogleLogin
                     width="400"
-                    onSuccess={credentialResponse => {
-                        const decoded = jwtDecode(credentialResponse.credential);
-                        console.log(credentialResponse);
-                        console.log(decoded);
-                        onLogin('google', decoded.email);
-                    }}
+                    onSuccess={handleGoogleLogin}
                     onError={() => {
-                        console.log('Login Failed');
+                        setError('Google Login Failed');
                     }}
                 />
 

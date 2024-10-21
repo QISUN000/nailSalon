@@ -8,6 +8,8 @@ import FullyBookedMessage from '../components/FullyBooked';
 import SidePanel from '../components/SidePanel';
 import LoginModal from '../components/LoginModal';
 import Image2 from '../assets/image2.png';
+import { createBooking, fetchUnavailableDates } from '../api/api';
+import { toast } from 'react-toastify';
 
 const SelectTime = () => {
     const navigate = useNavigate();
@@ -17,6 +19,7 @@ const SelectTime = () => {
     const [isDateFullyBooked, setIsDateFullyBooked] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [unavailableDates, setUnavailableDates] = useState([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const salonInfo = {
         name: "Bicolor Los Feliz",
@@ -30,23 +33,23 @@ const SelectTime = () => {
         if (!selectedProfessional) {
             navigate('/layout/professionals');
         } else {
-            fetchUnavailableDates(selectedProfessional.id);
+            loadUnavailableDates();
         }
+        checkLoginStatus();
     }, [selectedProfessional, navigate]);
 
-    const fetchUnavailableDates = async (professionalId) => {
+    const checkLoginStatus = () => {
+        const token = localStorage.getItem('token');
+        setIsLoggedIn(!!token);
+    };
+
+    const loadUnavailableDates = async () => {
         try {
-            // This is a placeholder. In a real application, you would fetch this data from your backend.
-            // For now, let's simulate some unavailable dates
-            const unavailableDates = [
-                new Date(2024, 9, 1),  // October 1, 2024
-                new Date(2024, 9, 5),  // October 5, 2024
-                new Date(2024, 9, 10), // October 10, 2024
-            ];
-            setUnavailableDates(unavailableDates);
+            const dates = await fetchUnavailableDates(selectedProfessional.id);
+            setUnavailableDates(dates);
         } catch (error) {
             console.error("Error fetching unavailable dates:", error);
-            // Handle the error appropriately
+            toast.error("Failed to load unavailable dates. Please try again.");
         }
     };
 
@@ -61,13 +64,37 @@ const SelectTime = () => {
     };
 
     const handleContinue = () => {
-        setIsLoginModalOpen(true);
+        if (isLoggedIn) {
+            handleBookingCreation();
+        } else {
+            setIsLoginModalOpen(true);
+        }
     };
 
-    const handleLogin = (method, email) => {
+    const handleLogin = (method, email, token, role) => {
         console.log(`Logged in with ${method}`, email);
         setIsLoginModalOpen(false);
-        navigate('/confirm');
+        setIsLoggedIn(true);
+        localStorage.setItem('token', token);
+        localStorage.setItem('userRole', role);
+        handleBookingCreation();
+    };
+
+    const handleBookingCreation = async () => {
+        try {
+            const bookingData = {
+                services: selectedServices.map(service => service.id),
+                professionalId: selectedProfessional.id,
+                date: selectedDate,
+                time: selectedTime
+            };
+            const response = await createBooking(bookingData);
+            toast.success('Booking created successfully!');
+            navigate('/booking-info', { state: { bookingId: response.id } });
+        } catch (error) {
+            console.error('Error creating booking:', error);
+            toast.error('Failed to create booking. Please try again.');
+        }
     };
 
     if (!selectedProfessional) {
