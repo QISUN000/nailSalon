@@ -18,6 +18,8 @@ import CustomerDashboard from './dashboard/customers/customerDashboard.jsx'
 import AppointmentsCustomer from './dashboard/customers/AppointmentsCustomer.jsx'
 import ProfessionalsDashboard from './dashboard/professionals/ProfessionalsDashboard.jsx'
 import AppointmentsProfessionals from './dashboard/professionals/AppointmentsProfessionals.jsx'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
@@ -82,10 +84,23 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <GoogleOAuthProvider clientId="893443404226-p3je197e46vbj5itdum0nfqi2jsv4qgo.apps.googleusercontent.com">
     <BookingProvider>
-    
-      <RouterProvider router={router} />
-     
-    </BookingProvider>
+        <>
+          <RouterProvider router={router} />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            limit={3}
+          />
+        </>
+      </BookingProvider>
     </GoogleOAuthProvider>
   </StrictMode>
 )

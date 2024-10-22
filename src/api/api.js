@@ -1,4 +1,11 @@
 import axios from 'axios';
+const getAuthToken = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  
+  // Ensure token has Bearer prefix
+  return token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+};
 
 const API_URL = 'http://localhost:8080/api';
 
@@ -49,18 +56,81 @@ export const googleLogin = async (idToken) => {
   }
 };
 
+api.interceptors.request.use(
+  (config) => {
+      const token = getAuthToken();
+      if (token) {
+          config.headers.Authorization = token;
+      }
+      return config;
+  },
+  (error) => {
+      return Promise.reject(error);
+  }
+);
+
+// Update createBooking function
 export const createBooking = async (bookingData) => {
   try {
-    const token = localStorage.getItem('token');
-    const response = await api.post('/bookings', bookingData, {
-      headers: {
-        'Authorization': `Bearer ${token}`
+      const token = getAuthToken();
+      if (!token) {
+          throw new Error('Please log in to create a booking');
       }
+
+      // Format the date and time
+      const [hours, minutes] = bookingData.time.split(':');
+      const datetime = new Date(bookingData.date);
+      datetime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+      // Match the BookingRequest structure expected by the backend
+      const bookingRequest = {
+        professional: {
+            id: bookingData.professionalId
+        },
+        services: bookingData.services.map(serviceId => ({ 
+            id: serviceId 
+        })),
+        startTime: datetime.toISOString()
+    };
+    console.log('Complete request:', {
+        body: bookingRequest,
+        headers: {
+            Authorization: token
+        }
     });
-    return response.data;
+
+      console.log('Token:', token);  // Debug log
+      console.log('Sending booking request:', bookingRequest);
+
+      const response = await api.post('/bookings', bookingRequest, {
+          headers: {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+          }
+      });
+
+      return response.data;
   } catch (error) {
-    console.error('Error creating booking:', error);
-    throw error;
+      console.error('API Error:', error.response?.data);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+          localStorage.removeItem('token'); // Clear invalid token
+          throw new Error('Please log in again');
+      }
+      const errorMessage = error.response?.data?.message || 'Failed to create booking';
+      throw new Error(errorMessage);
+  }
+};
+
+// Updated formatDateTime function to handle separate date and time
+const formatDateTime = (date, time) => {
+  try {
+      const [hours, minutes] = time.split(':');
+      const datetime = new Date(date);
+      datetime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      return datetime.toISOString();
+  } catch (error) {
+      console.error('Error formatting date time:', error);
+      throw new Error('Invalid date or time format');
   }
 };
 

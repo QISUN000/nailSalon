@@ -64,38 +64,104 @@ const SelectTime = () => {
     };
 
     const handleContinue = () => {
+        // First check if all required fields are selected
+        if (!selectedDate || !selectedTime) {
+            toast.error('Please select both date and time');
+            return;
+        }
+    
+        if (!selectedServices || selectedServices.length === 0) {
+            toast.error('Please select at least one service');
+            return;
+        }
+    
+        // Then check login status
         if (isLoggedIn) {
             handleBookingCreation();
         } else {
+            toast.info('Please log in to continue');
             setIsLoginModalOpen(true);
         }
     };
-
+    
     const handleLogin = (method, email, token, role) => {
         console.log(`Logged in with ${method}`, email);
         setIsLoginModalOpen(false);
         setIsLoggedIn(true);
-        localStorage.setItem('token', token);
+        console.log('Login Response:', {
+            method,
+            email,
+            token,  // Let's see the exact token format
+            role
+        });
+        // Ensure token has Bearer prefix
+        const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+        localStorage.setItem('token', formattedToken);
         localStorage.setItem('userRole', role);
-        handleBookingCreation();
+        
+        // Set the token in axios defaults
+        setAuthToken(formattedToken);
+        
+        // Add delay before creating booking
+        setTimeout(() => {
+            handleBookingCreation();
+        }, 500);
     };
-
+    
     const handleBookingCreation = async () => {
         try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                toast.error('Please log in to continue');
+                setIsLoginModalOpen(true);
+                return;
+            }
+    
+            if (!selectedDate || !selectedTime) {
+                toast.error('Please select both date and time');
+                return;
+            }
+    
+            if (!selectedServices || selectedServices.length === 0) {
+                toast.error('Please select at least one service');
+                return;
+            }
+    
+            const loadingToast = toast.loading('Creating your booking...');
+    
             const bookingData = {
                 services: selectedServices.map(service => service.id),
                 professionalId: selectedProfessional.id,
                 date: selectedDate,
                 time: selectedTime
             };
-            const response = await createBooking(bookingData);
-            toast.success('Booking created successfully!');
-            navigate('/booking-info', { state: { bookingId: response.id } });
+    
+            try {
+                const response = await createBooking(bookingData);
+                toast.dismiss(loadingToast);
+    
+                if (response?.id) {
+                    toast.success('Booking created successfully!');
+                    setTimeout(() => {
+                        navigate('/booking-info', { state: { bookingId: response.id } });
+                    }, 1000);
+                }
+            } catch (error) {
+                toast.dismiss(loadingToast);
+                console.error('Booking error:', error);
+                
+                if (error.message.includes('log in')) {
+                    setIsLoginModalOpen(true);
+                } else {
+                    toast.error(error.message || 'Failed to create booking');
+                }
+            }
         } catch (error) {
-            console.error('Error creating booking:', error);
-            toast.error('Failed to create booking. Please try again.');
+            toast.error('An unexpected error occurred');
+            console.error('Error in booking creation:', error);
         }
     };
+  
 
     if (!selectedProfessional) {
         return <div>Loading...</div>;
