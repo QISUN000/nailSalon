@@ -44,23 +44,28 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         e.preventDefault();
         setError('');
         try {
-            // Validate input
-            if (!email || !password || !name) {
-                setError('All fields are required');
-                return;
-            }
-    
-            console.log('Signing up with:', { email, name }); // Don't log password
+            console.log('Signing up with:', { email, name });
+            
+            // First register the user
             const registerResponse = await register(email, password, name);
             console.log('Register response:', registerResponse);
     
-            // After successful registration, log in the user
-            const loginData = await login(email, password);
-            handleSuccessfulLogin('signup', email, loginData.accessToken, loginData.role);
+            if (registerResponse.success) {
+                // After successful registration, perform login
+                const loginData = await login(email, password);
+                console.log('Login response after registration:', loginData);
+    
+                if (loginData.accessToken) {
+                    handleSuccessfulLogin('signup', email, loginData.accessToken, loginData.role);
+                } else {
+                    throw new Error('Login failed after registration');
+                }
+            } else {
+                throw new Error(registerResponse.message || 'Registration failed');
+            }
         } catch (error) {
-            console.error('Signup error:', error);
-            // Show more specific error message
-            setError(error.response?.data?.message || 'Error signing up. Please try again.');
+            console.error('Signup/Login error:', error);
+            setError(error.message || 'Error during signup process');
         }
     };
 
