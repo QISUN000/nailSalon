@@ -15,7 +15,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
     const handleSuccessfulLogin = (method, email, token, role) => {
         setAuthToken(token);
         onLogin(method, email, token, role);
-        onClose();
+        //onClose();
     };
 
     const handleEmailSubmit = async (e) => {
@@ -44,12 +44,23 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         e.preventDefault();
         setError('');
         try {
-            await register(email, password, name);
+            // Validate input
+            if (!email || !password || !name) {
+                setError('All fields are required');
+                return;
+            }
+    
+            console.log('Signing up with:', { email, name }); // Don't log password
+            const registerResponse = await register(email, password, name);
+            console.log('Register response:', registerResponse);
+    
             // After successful registration, log in the user
             const loginData = await login(email, password);
             handleSuccessfulLogin('signup', email, loginData.accessToken, loginData.role);
         } catch (error) {
-            setError('Error signing up. Please try again.');
+            console.error('Signup error:', error);
+            // Show more specific error message
+            setError(error.response?.data?.message || 'Error signing up. Please try again.');
         }
     };
 

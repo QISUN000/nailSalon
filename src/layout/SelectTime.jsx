@@ -8,7 +8,7 @@ import FullyBookedMessage from '../components/FullyBooked';
 import SidePanel from '../components/SidePanel';
 import LoginModal from '../components/LoginModal';
 import Image2 from '../assets/image2.png';
-import { createBooking, fetchUnavailableDates } from '../api/api';
+import { createBooking, fetchUnavailableDates,setAuthToken } from '../api/api';
 import { toast } from 'react-toastify';
 
 const SelectTime = () => {

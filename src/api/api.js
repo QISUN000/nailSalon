@@ -38,10 +38,19 @@ export const login = async (email, password) => {
 
 export const register = async (email, password, name) => {
   try {
-    const response = await api.post('/auth/register', { email, password, name });
+    // Log the request data
+    const registerData = { email, password, name };
+    console.log('Registration request:', registerData);
+
+    const response = await api.post('/auth/register', registerData);
+    console.log('Registration response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error signing up:', error);
+    // Log the actual error response from the server
+    if (error.response?.data) {
+      console.error('Server error details:', error.response.data);
+    }
     throw error;
   }
 };
