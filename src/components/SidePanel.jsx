@@ -48,7 +48,7 @@ const SidePanel = ({ salonInfo, selectedServices, selectedProfessional, selected
             {selectedServices.map(service => (
               <div key={service.id} className="mb-2">
                 <p className="text-sm">{service.name}</p>
-                <p className="text-sm text-gray-500">{service.duration} • US${service.price}</p>
+                <p className="text-sm text-gray-500">{service.duration} mins • ${service.price}</p>
               </div>
             ))}
           </div>
@@ -75,7 +75,7 @@ const SidePanel = ({ salonInfo, selectedServices, selectedProfessional, selected
       <div className="bg-gray-50 p-4">
         <div className="flex justify-between items-center mb-4">
           <span className="font-semibold">Total</span>
-          <span className="font-semibold">from US${totalPrice}</span>
+          <span className="font-semibold">from ${totalPrice}</span>
         </div>
         <p className="text-sm text-gray-500 mb-4">
           {selectedServices.length} service{selectedServices.length !== 1 ? 's' : ''} • 

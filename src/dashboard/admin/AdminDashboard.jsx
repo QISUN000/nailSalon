@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar';
 
 const AdminDashboard = () => {
- 
+  
 
   const [activePage, setActivePage] = useState('Appointments');
   const location = useLocation();

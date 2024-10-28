@@ -49,7 +49,7 @@ const SelectService = () => {
   };
 
   const handleContinue = () => {
-    navigate('/layout/professionals');
+    navigate('/booking/professionals');
   };
 
   return (

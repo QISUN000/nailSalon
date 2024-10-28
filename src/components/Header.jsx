@@ -10,21 +10,21 @@ const Header = ({ title, breadcrumbs, selectedCrumbs = [] }) => {
         
         switch(crumb) {
             case 'Services':
-                navigate('/layout');
+                navigate('/booking');
                 break;
             case 'Professional':
                 if (currentStep === 'Professional' || currentStep === 'Time' || currentStep === 'Confirm') {
-                    navigate('/layout/professionals');
+                    navigate('/booking/professionals');
                 }
                 break;
             case 'Time':
                 if (currentStep === 'Time' || currentStep === 'Confirm') {
-                    navigate('/layout/time');
+                    navigate('/booking/time');
                 }
                 break;
             case 'Confirm':
                 if (currentStep === 'Confirm') {
-                    navigate('/layout/confirm');
+                    navigate('/booking/confirm');
                 }
                 break;
             default:

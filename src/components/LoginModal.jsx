@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin } from '@react-oauth/google';
-import { checkEmail, login, register, googleLogin, setAuthToken } from '../api/api';
+import { checkEmail, login, register, googleLogin, setAuthToken,getUserName } from '../api/api';
 
 const LoginModal = ({ isOpen, onClose, onLogin }) => {
     const [email, setEmail] = useState('');
@@ -9,13 +9,17 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
     const [name, setName] = useState('');
     const [step, setStep] = useState('email');
     const [error, setError] = useState('');
+    const handleBack = () => {
+        setStep('email');
+        setError('');
+    };
 
     if (!isOpen) return null;
 
-    const handleSuccessfulLogin = (method, email, token, role) => {
-        setAuthToken(token);
-        onLogin(method, email, token, role);
-        //onClose();
+    const handleSuccessfulLogin = (token, role) => {
+        console.log('Calling onLogin with:', { token, role });
+        onLogin('password', null, token, role); 
+        console.log('role after login:', role);
     };
 
     const handleEmailSubmit = async (e) => {
@@ -34,7 +38,10 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         setError('');
         try {
             const data = await login(email, password);
-            handleSuccessfulLogin('email', email, data.accessToken, data.role);
+            console.log('Login response data:', data);
+          
+          
+            handleSuccessfulLogin(data.token, data.role);
         } catch (error) {
             setError('Invalid email or password. Please try again.');
         }
@@ -55,8 +62,8 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
                 const loginData = await login(email, password);
                 console.log('Login response after registration:', loginData);
     
-                if (loginData.accessToken) {
-                    handleSuccessfulLogin('signup', email, loginData.accessToken, loginData.role);
+                if (loginData.token) {
+                    handleSuccessfulLogin(loginData.token, loginData.role);
                 } else {
                     throw new Error('Login failed after registration');
                 }
@@ -73,7 +80,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         try {
             const decoded = jwtDecode(credentialResponse.credential);
             const data = await googleLogin(credentialResponse.credential);
-            handleSuccessfulLogin('google', decoded.email, data.accessToken, 'CUSTOMER');
+            handleSuccessfulLogin( data.accessToken, 'CUSTOMER');
         } catch (error) {
             setError('Error with Google login. Please try again.');
         }
@@ -100,7 +107,16 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
     const renderPasswordStep = () => (
         <form onSubmit={handlePasswordSubmit}>
-            <p className="mb-2">Enter your password to log in as {email}</p>
+            <div className="mb-4 flex items-center">
+                <button
+                    type="button"
+                    onClick={handleBack}
+                    className="text-gray-600 hover:text-gray-800 mr-2"
+                >
+                    ← Back
+                </button>
+                <p>Enter password for {email}</p>
+            </div>
             <input
                 type="password"
                 placeholder="Password"
@@ -120,7 +136,16 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
     const renderSignUpStep = () => (
         <form onSubmit={handleSignUp}>
-            <p className="mb-2">Create an account for {email}</p>
+             <div className="mb-4 flex items-center">
+                <button
+                    type="button"
+                    onClick={handleBack}
+                    className="text-gray-600 hover:text-gray-800 mr-2"
+                >
+                    ← Back
+                </button>
+                <p>Create account for {email}</p>
+            </div>
             <input
                 type="text"
                 placeholder="Full Name"
@@ -147,11 +172,11 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
     );
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[999]" >
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">Log in or sign up</h2>
-                    <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                    <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-4xl">
                         ×
                     </button>
                 </div>

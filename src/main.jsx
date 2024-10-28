@@ -20,6 +20,8 @@ import ProfessionalsDashboard from './dashboard/professionals/ProfessionalsDashb
 import AppointmentsProfessionals from './dashboard/professionals/AppointmentsProfessionals.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import UnauthorizedAccess from './dashboard/UnauthorizedAccess.jsx'
 
 const router = createBrowserRouter([
   {
@@ -27,8 +29,16 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
+    path: "/unauthorizedaccess",
+    element: <UnauthorizedAccess />,
+  },
+  {
     path: "/customer",
-    element: <CustomerDashboard />,
+    element: (
+      <ProtectedRoute allowedRoles={['CUSTOMER']}>
+        <CustomerDashboard />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -38,7 +48,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/professional",
-    element: <ProfessionalsDashboard />,
+    element: (
+      <ProtectedRoute allowedRoles={['PROFESSIONAL']}>
+        <ProfessionalsDashboard />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -48,7 +62,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminDashboard />,
+    element: (
+      <ProtectedRoute allowedRoles={['ADMIN']}>
+        <AdminDashboard />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -61,7 +79,7 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: "/layout",
+    path: "/booking",
     element: <Layout />,
     children: [
       {
@@ -83,7 +101,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <GoogleOAuthProvider clientId="893443404226-p3je197e46vbj5itdum0nfqi2jsv4qgo.apps.googleusercontent.com">
-    <BookingProvider>
+      <BookingProvider>
         <>
           <RouterProvider router={router} />
           <ToastContainer

@@ -8,7 +8,7 @@ import FullyBookedMessage from '../components/FullyBooked';
 import SidePanel from '../components/SidePanel';
 import LoginModal from '../components/LoginModal';
 import Image2 from '../assets/image2.png';
-import { createBooking,  setAuthToken } from '../api/api';
+import { createBooking,  setAuthToken,getRoleBasedPath } from '../api/api';
 import { toast } from 'react-toastify';
 
 const SelectTime = () => {
@@ -20,6 +20,7 @@ const SelectTime = () => {
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [unavailableDates, setUnavailableDates] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [bookingSuccess, setBookingSuccess] = useState(false);
 
     const salonInfo = {
         name: "Bicolor Los Feliz",
@@ -29,31 +30,14 @@ const SelectTime = () => {
         location: "Central LA, Los Angeles"
     };
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('token');
-    //     setIsLoggedIn(!!token);
-
-    //     if (!selectedProfessional) {
-    //         navigate('/layout/professionals');
-    //     } else {
-    //         // loadUnavailableDates();
-    //     }
-    // }, [selectedProfessional, navigate]);
+    
     useEffect(() => {
         if (isLoggedIn && !isLoginModalOpen) {
             handleBookingCreation();  // Call this only if the user is logged in
         }
     }, [isLoggedIn]);
 
-    // const loadUnavailableDates = async () => {
-    //     try {
-    //         const dates = await fetchUnavailableDates(selectedProfessional.id);
-    //         setUnavailableDates(dates);
-    //     } catch (error) {
-    //         console.error("Error fetching unavailable dates:", error);
-    //         toast.error("Failed to load unavailable dates. Please try again.");
-    //     }
-    // };
+   
 
     const handleDateSelect = (date) => {
         setSelectedDate(date);
@@ -84,8 +68,9 @@ const SelectTime = () => {
     
     const handleLogin = async (method, email, token, role) => {
         try {
-            setAuthToken(token);
+            console.log('handleLogin received:', { method, email, token, role });
             localStorage.setItem('userRole', role);
+            console.log('role stored:', localStorage.getItem('userRole'));
             
             setIsLoginModalOpen(false);
             setIsLoggedIn(true);
@@ -98,31 +83,40 @@ const SelectTime = () => {
     };
 
  
-
     const handleBookingCreation = async () => {
         try {
             const loadingToast = toast.loading('Creating your booking...');
-
+    
+           
+            const [hours, minutes] = selectedTime.split(':');
+            const dateTime = new Date(selectedDate);
+            dateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    
             const bookingData = {
-                services: selectedServices.map(service => service.id),
                 professionalId: selectedProfessional.id,
-                date: selectedDate,
-                time: selectedTime
+                serviceIds: selectedServices.map(service => service.id),
+                startTime: dateTime.toISOString() 
             };
-
+            console.log('Booking data being sent:', bookingData);
+            console.log('Token:', localStorage.getItem('token'));
+           
             const response = await createBooking(bookingData);
             toast.dismiss(loadingToast);
-
+    
             if (response?.id) {
                 toast.success('Booking created successfully!');
-                setTimeout(() => {
-                    navigate('/booking-info', { state: { bookingId: response.id } });
-                }, 1000);
+                setBookingSuccess(true);
+                const role = localStorage.getItem('userRole');
+                navigate(getRoleBasedPath(role));
             }
+            else{
+                toast.error('Booking creation failed');
+            }
+            
         } catch (error) {
             toast.error(error.message || 'Failed to create booking');
             console.error('Booking error:', error);
-
+            
             if (error.message.includes('log in')) {
                 setIsLoginModalOpen(true);
             }
@@ -132,6 +126,14 @@ const SelectTime = () => {
     if (!selectedProfessional) {
         return <div>Loading...</div>;
     }
+
+    useEffect(() => {
+        console.log('isLoggedIn changed:', isLoggedIn, 'role:', localStorage.getItem('userRole'));
+    }, [isLoggedIn]);
+    
+    useEffect(() => {
+        console.log('Component mounted/updated, role:', localStorage.getItem('userRole'));
+    });
 
     return (
         <div>

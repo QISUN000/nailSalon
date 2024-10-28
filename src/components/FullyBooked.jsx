@@ -3,11 +3,7 @@ import React from 'react';
 const FullyBookedMessage = ({ professionalName }) => {
   return (
     <div className="text-center py-8">
-      <img
-        src={`http://localhost:8080${professionalName.imageUrl}`}
-        alt={professionalName}
-        className="w-16 h-16 rounded-full mx-auto mb-4"
-      />
+    
       <h3 className="text-lg font-semibold mb-2">{professionalName} is fully booked on this date</h3>
       <p className="text-gray-600 mb-4">Available from Wed, Oct 16</p>
       <div className="space-x-4">

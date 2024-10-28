@@ -19,7 +19,7 @@ const ProfessionalCard = ({ professional, isSelected, onSelect }) => {
         {professional.instagramHandle && (
           <p className="text-sm text-blue-500">Instagram: {professional.instagramHandle}</p>
         )}
-        <p className="mt-2">from US${professional.price}</p>
+        <p className="mt-2">from ${professional.price}</p>
       </div>
     </div>
   );

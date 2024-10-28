@@ -35,7 +35,7 @@ const Professionals = () => {
   };
 
   const handleContinue = () => {
-    navigate('/layout/selecttime');
+    navigate('/booking/selecttime');
   };
 
   useEffect(() => {

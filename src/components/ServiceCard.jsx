@@ -26,7 +26,7 @@ const ServiceCard = ({ service, isSelected, onSelect }) => {
       <div className="flex justify-between items-start">
         <div className="flex-grow pr-4">
           <h3 className="font-medium text-lg">{name}</h3>
-          <p className="text-sm text-gray-500">{duration}</p>
+          <p className="text-sm text-gray-500">{duration} mins</p>
           <p className={`text-sm mt-2 text-gray-700 ${isExpanded ? '' : 'line-clamp-2'}`}>
             {description}
           </p>
@@ -40,7 +40,7 @@ const ServiceCard = ({ service, isSelected, onSelect }) => {
           )}
         </div>
         <div className="flex flex-col items-end">
-          <p className="text-sm text-gray-500 mb-1">from US${price}</p>
+          <p className="text-sm text-gray-500 mb-1">from ${price}</p>
           <div className={`w-6 h-6 rounded-full flex items-center justify-center
             ${isSelected ? 'bg-blue-500 text-white' : 'border border-gray-300 text-transparent'}
           `}>

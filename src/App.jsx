@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link as ScrollLink } from 'react-scroll';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink,useNavigate } from 'react-router-dom';
 import './App.css'
 import Image from './assets/bg.jpg'
 import Image2 from './assets/image2.png'
@@ -15,8 +15,31 @@ import { TbBrandTiktok } from "react-icons/tb";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Carousel from './components/carousel';
+import { setAuthToken,getRoleBasedPath } from './api/api';
+import LoginModal from './components/LoginModal';
+import { toast } from 'react-toastify';
 
 function App() {
+
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async ( token, role) => {
+    try {
+        setAuthToken(token);
+        localStorage.setItem('userRole', role);
+        navigate(getRoleBasedPath(role));
+        
+        setIsLoginModalOpen(false);
+  
+
+        toast.success('Successfully logged in.');
+    } catch (error) {
+        console.error('Login error:', error);
+        toast.error('Error during login process');
+    }
+};
+
   AOS.init({
     duration: 700,
     once: true
@@ -30,11 +53,12 @@ function App() {
 
   const content =
     <>
-      <div className='lg:hidden duration-500 block absolute top-32 left-0 right-0 bg-gray-50 transition-opacity text-black'>
+      <div className='lg:hidden duration-500 block absolute top-32 left-0 right-0 bg-gray-50 transition-opacity text-black z-10'>
         <ul className='text-center text-2xl p-20'>
           <ScrollLink  spy={true} smooth={true} className='my-4 py-4 block transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 ' to="Services"><li>Services</li></ScrollLink >
           <ScrollLink  spy={true} smooth={true} className='my-4 py-4 block transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 ' to="Creations"><li>Creations</li></ScrollLink  >
           <ScrollLink  spy={true} smooth={true} className='my-4 py-4 block transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 ' to="Contacts"><li>Contacts</li></ScrollLink >
+          <li ><button className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" onClick={()=>{setIsLoginModalOpen(true)}}>Login</button></li>
         </ul>
       </div>
     </>
@@ -42,6 +66,12 @@ function App() {
   return (
     <div className='font-poppins font-extralight'>
       <div className="min-h-screen ">
+      <LoginModal 
+                isOpen={isLoginModalOpen}
+                onClose={() => setIsLoginModalOpen(false)}
+                onLogin={handleLogin}
+
+            />
 
         <header className="px-20 py-10 flex absolute justify-between w-full z-50 text-white lg:py-14 flex-1 h-10vh ">
           <div data-aos="fade-down" className="flex flex-1 items-center">
@@ -55,6 +85,7 @@ function App() {
               </li></ScrollLink>
               <ScrollLink className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" spy={true} smooth={true} to="Creations"><li>Creations</li></ScrollLink>
               <ScrollLink className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" spy={true} smooth={true} to="Contacts"><li>Contacts</li></ScrollLink>
+              <li ><button className="transition ease-in-out delay-150 hover:cursor-pointer hover:scale-110 border-b-2 border-transparent hover:border-current" onClick={()=>{setIsLoginModalOpen(true)}}>Login</button></li>
             </ul>
 
           </div>
@@ -71,12 +102,19 @@ function App() {
         {/* Hero Section */}
         <section className="relative h-screen flex items-end">
           <img src={Image} alt="Woman" className="w-full h-full object-cover" />
-          <div className="px-20 py-10 flex absolute justify-between w-full z-50 text-white lg:py-14 flex-1  items-center flex-wrap">
+          <div className="px-20 py-10 flex absolute justify-between w-full z-40 text-white lg:py-14 flex-1  items-center flex-wrap">
             <div>
               <h1 data-aos="fade-up" data-aos-delay="200" data-aos-anchor="#hero-section" className="text-6xl text-white mb-4 font-poppins font-extralight">Nails Studio</h1>
               <p data-aos="fade-up" data-aos-delay="250" data-aos-anchor="#hero-section" className="text-2xl text-white mb-8">Expert Nail Care and Exquisite Cocktails in one Place</p>
             </div>
-            <RouterLink to="/layout" data-aos="fade-up" data-aos-delay="300" data-aos-anchor="#hero-section" className="flex items-center justify-center border-white border-solid border-2 h-20 text-2xl text-white px-10 py-3 rounded-full hover:bg-gray-200  hover:text-black transition duration-300">PLAN YOUR VISIT</RouterLink>
+            <RouterLink 
+  to="/booking" 
+  className="flex items-center justify-center border-white border-solid border-2 h-20 text-2xl text-white px-10 py-3 rounded-full 
+    hover:bg-white hover:text-black hover:scale-105
+    transition-all duration-300 ease-in-out"
+>
+  PLAN YOUR VISIT
+</RouterLink>
           </div>
         </section>
 
@@ -100,7 +138,7 @@ function App() {
             <img src={Manicure} alt="Manicure" className="object-cover w-full" />
             <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
               <span className="text-2xl mb-2 sm:mb-0">Manicure</span>
-              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</button>
+              <RouterLink to="/booking"className="border border-black px-4 py-2 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</RouterLink>
             </div>
           </div>
 
@@ -109,7 +147,7 @@ function App() {
             <img src={Coctails} alt="Cocktails" className="object-cover w-full" />
             <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
               <span className="text-2xl mb-2 sm:mb-0">Nail Design</span>
-              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Menu →</button>
+              <RouterLink to="/booking" className="border border-black px-4 py-2 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</RouterLink>
             </div>
           </div>
 
@@ -119,7 +157,7 @@ function App() {
             <img src={Coffee} alt="Coffee" className="object-cover w-full" />
             <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
               <span className="text-2xl mb-2 sm:mb-0">Additional Services</span>
-              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Menu →</button>
+              <RouterLink to="/booking" className="border border-black px-4 py-2 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</RouterLink>
             </div>
           </div>
 
@@ -128,7 +166,7 @@ function App() {
             <img src={Pedicure} alt="Pedicure" className="object-cover w-full" />
             <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
               <span className="text-2xl mb-2 sm:mb-0">Pedicure</span>
-              <button className="border border-black px-4 py-1 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</button>
+              <RouterLink to="/booking" className="border border-black px-4 py-2 rounded-full hover:bg-black hover:text-white transition duration-300">Show price →</RouterLink>
             </div>
           </div>
 

@@ -1,30 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { Home, Users } from 'lucide-react';
+import { Home, Users,LogOut } from 'lucide-react';
 import Image2 from '../assets/image2.png';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { getUserName,api } from '../api/api';
 
 const Sidebar = ({ activePage, onPageChange, userRole }) => {
-  const [adminName, setAdminName] = useState('');
+const [Name, setName] = useState('');
+const [email, setEmail] = useState('');
+const [createdAt, setCreatedAt] = useState('');
   const [loading, setLoading] = useState(true);
+  
+  const token = localStorage.getItem('token');
+
+    console.log('Initial token loaded:', token); // Debug log
+
 
   useEffect(() => {
-    const fetchAdminName = async () => {
-      try {
-        const response = await fetch('/api/admin-name');
-        if (!response.ok) throw new Error('Failed to fetch admin name');
-        const data = await response.json();
-        setAdminName(data.name);
-      } catch (error) {
-        console.error('Error fetching admin name:', error);
-        setAdminName('Admin');
-      } finally {
-        setLoading(false);
-      }
+    const fetchUserData = async () => {
+        // Check if user is authenticated by checking if the token exists
+        const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
+        if (!token) {
+            console.log('User not authenticated');
+            // Optionally, redirect the user to the login page if not authenticated
+            return; // Exit early if not authenticated
+        }
+
+        try {
+            // Fetch user data if authenticated
+            const userResponse = await getUserName();
+            localStorage.setItem('userData', JSON.stringify(userResponse.data));
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            const { name, email, createdAt } = userData;
+            setName(name);
+            setEmail(email);
+            setCreatedAt(createdAt);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
     };
 
-    fetchAdminName();
-  }, []);
+    fetchUserData();
+}, []);
+
+const handleLogout = ()=>{
+  localStorage.clear();
+  navigate('/')
+}
 
   const allMenuItems = [
     { icon: Home, text: 'Appointments', roles: ['admin', 'customer','professional'] },
@@ -64,13 +88,21 @@ const Sidebar = ({ activePage, onPageChange, userRole }) => {
         </ul>
       </nav>
       <div className="p-4 border-t">
-        <div className="flex items-center">
-          <img src={Image2} alt="Admin" className="w-8 h-8 rounded-full mr-2" />
-          {loading ? (
-            <div className="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
-          ) : (
-            <span className="text-sm text-gray-600">{adminName}</span>
-          )}
+        <div className="flex flex-col">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center">
+              <img src={Image2} alt="Admin" className="w-8 h-8 rounded-full mr-2" />
+              <span className="text-xl font-medium text-gray-600">{Name}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <LogOut size={20} />
+            </button>
+          </div>
+          <div className="text-base text-gray-500">{email}</div>
+          <div className="text-sm text-gray-400">Member since: {createdAt}</div>
         </div>
       </div>
     </aside>
