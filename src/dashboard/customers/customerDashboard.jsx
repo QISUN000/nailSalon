@@ -18,7 +18,7 @@ const customerDashboard = () => {
     }
   };
 
-  // Set active page based on current route
+ 
   React.useEffect(() => {
     if (location.pathname === '/admin') {
       setActivePage('Appointments');

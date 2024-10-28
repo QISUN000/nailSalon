@@ -54,22 +54,14 @@ export const setAuthToken = (token) => {
         return;
     }
 
-    // Check if it's a valid JWT token format
-    const jwtRegex = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
-    
-    // Remove 'Bearer ' if it exists to check the actual token
-    const actualToken = token.startsWith('Bearer ') ? token.slice(7) : token;
-    
-    if (!jwtRegex.test(actualToken)) {
-        console.error('Invalid token format provided');
-        return;
-    }
-
-    // Add Bearer prefix if not present
+    // Format token consistently
     const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+    
+    // Store token and update headers
     localStorage.setItem('token', formattedToken);
     api.defaults.headers.common['Authorization'] = formattedToken;
-    console.log('Token set successfully:', formattedToken.substring(0, 20) + '...');
+    console.log('Token set successfully:', formattedToken);
+    return true;
 };
 
 // Enhanced login with proper token handling
@@ -100,6 +92,7 @@ export const login = async (email, password) => {
 };
 
 export const getRoleBasedPath = (role) => {
+    console.log('role before navigate', role)
     switch(role) {
         case 'PROFESSIONAL':
             return '/professional';

@@ -28,6 +28,7 @@ function App() {
     try {
         setAuthToken(token);
         localStorage.setItem('userRole', role);
+        console.log('role before login',role)
         navigate(getRoleBasedPath(role));
         
         setIsLoginModalOpen(false);

@@ -48,7 +48,7 @@ const AppointmentsCustomer = () => {
       const appointments = [
         { id: 1, name: 'Name', date: 'JUNE 21, 2024', services: 'Haircut', startTime: '10:00 AM', status: 'APPROVED' },
         { id: 2, name: 'Name', date: 'JUNE 22, 2024', services: 'Coloring', startTime: '2:00 PM', status: 'REQUESTED' },
-        // Add more appointments as needed
+     
       ];
     
     

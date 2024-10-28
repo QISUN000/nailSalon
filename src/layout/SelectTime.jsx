@@ -66,9 +66,9 @@ const SelectTime = () => {
     };
 
     
-    const handleLogin = async (method, email, token, role) => {
+    const handleLogin = async ( token, role) => {
         try {
-            console.log('handleLogin received:', { method, email, token, role });
+            console.log('handleLogin received:', {  token, role });
             localStorage.setItem('userRole', role);
             console.log('role stored:', localStorage.getItem('userRole'));
             

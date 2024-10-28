@@ -16,10 +16,25 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
     if (!isOpen) return null;
 
-    const handleSuccessfulLogin = (token, role) => {
-        console.log('Calling onLogin with:', { token, role });
-        onLogin('password', null, token, role); 
-        console.log('role after login:', role);
+    const handleSuccessfulLogin = async (token, role) => {
+        try {
+            // Store values before the onLogin call
+            const currentToken = token;
+            const currentRole = role;
+            
+            console.log('Before onLogin - Token:', currentToken, 'Role:', currentRole);
+            
+            // Call onLogin and await if it returns a promise
+            // await Promise.resolve(onLogin('password', null, currentToken, currentRole));
+            await Promise.resolve(onLogin( currentToken, currentRole));
+            console.log('After onLogin - Token:', currentToken, 'Role:', currentRole);
+            
+            // Optionally verify the login state here
+            // You could add a callback prop to confirm the login was successful
+        } catch (error) {
+            console.error('Error during login process:', error);
+            setError('Login process failed. Please try again.');
+        }
     };
 
     const handleEmailSubmit = async (e) => {

@@ -37,7 +37,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['CUSTOMER']}>
         <CustomerDashboard />
-      </ProtectedRoute>
+       </ProtectedRoute>
     ),
     children: [
       {
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['PROFESSIONAL']}>
         <ProfessionalsDashboard />
-      </ProtectedRoute>
+       </ProtectedRoute>
     ),
     children: [
       {
@@ -65,7 +65,7 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowedRoles={['ADMIN']}>
         <AdminDashboard />
-      </ProtectedRoute>
+       </ProtectedRoute>
     ),
     children: [
       {

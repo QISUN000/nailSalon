@@ -2,9 +2,9 @@ import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   
-    if (!document.cookie.includes('loggedIn')) {
-        return <Navigate to="/" replace />;
-    }
+    // if (!document.cookie.includes('loggedIn')) {
+    //     return <Navigate to="/" replace />;
+    // }
     if (!localStorage.getItem('token')) {
             return <Navigate to="/" replace />;
         }
