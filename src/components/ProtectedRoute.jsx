@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
        
         const userRole = localStorage.getItem('userRole');
 
-        console.log('Current userRole:', userRole);  // Check what role we have
+        console.log('Current userRole:', userRole);  
         console.log('Allowed roles:', allowedRoles);
         if (allowedRoles && !allowedRoles.includes(userRole)) {
             return <Navigate to="/unauthorizedaccess" replace />;
