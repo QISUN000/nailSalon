@@ -1,80 +1,70 @@
 import React, { useEffect, useState } from 'react';
-import DataTable from '../DataTable'
-import Header from '../ComponentHeader'
-import axios from 'axios';
-import { format } from 'date-fns'; 
+import DataTable from '../DataTable';
+import Header from '../ComponentHeader';
+import { getProfessionalId, getProfessionalAppointments } from '../../api/api.js';
+import { format } from 'date-fns';
 
 const AppointmentsProfessionals = () => {
-    const columns = [
-        { key: 'name', header: 'CUSTOMERS' },
-        { key: 'date', header: 'DATA' },
-        { key: 'services', header: 'SERVICES' },
-        { key: 'startTime', header: 'START TIME' },
-        { key: 'status', header: 'STATUS' },
-    ];
-    
-    const [appointments, setAppointments] = useState([]);
-    const [professionalId, setProfessionalId] = useState(null); // Changed to null initial state
+  const [appointments, setAppointments] = useState([]);
+  const [professionalId, setProfessionalId] = useState(null);
 
-    const handleGetProfessionalID = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/api/professionals/user', {
-                headers: {
-                    'Authorization': `${localStorage.getItem('token')}`
-                }
-            });
-            setProfessionalId(response.data.id);
-        } catch (error) {
-            console.error('Getting professional Id error', error);
-        }
-    };
+  const columns = [
+    { key: 'name', header: 'CUSTOMERS' },
+    { key: 'date', header: 'DATA' },
+    { key: 'services', header: 'SERVICES' },
+    { key: 'startTime', header: 'START TIME' },
+    { key: 'status', header: 'STATUS' },
+  ];
 
-    const handleAppointments = async (id) => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/bookings/professional/${id}`, {
-                headers: {
-                    'Authorization': `${localStorage.getItem('token')}`
-                }
-            });
-            
-            const formatteddata = response.data.map(e => ({
-                id: e.id,
-                name: e.customer.name,
-                date: format(new Date(e.startTime), 'MMMM dd, yyyy'),
-                services: e.services.map(service => service.name).join(', '),
-                startTime: format(new Date(e.startTime), 'hh:mm a'),
-                status: e.status,
-            }));
-            
-            setAppointments(formatteddata);
-        } catch (error) {
-            console.error('Getting Appointments error', error);
-        }
-    };
+  const handleGetProfessionalID = async () => {
+    try {
+      const id = await getProfessionalId();
+      setProfessionalId(id);
+    } catch (error) {
+      console.error('Getting professional Id error', error);
+    }
+  };
 
-    // First useEffect to get professional ID
-    useEffect(() => {
-        handleGetProfessionalID();
-    }, []);
+  const handleAppointments = async (id) => {
+    try {
+      const data = await getProfessionalAppointments(id);
+      const formattedData = data.map(e => ({
+        id: e.id,
+        name: e.customer.name,
+        date: format(new Date(e.startTime), 'MMMM dd, yyyy'),
+        services: e.services.map(service => service.name).join(', '),
+        startTime: format(new Date(e.startTime), 'hh:mm a'),
+        status: e.status,
+      }));
+      setAppointments(formattedData);
+    } catch (error) {
+      console.error('Getting Appointments error', error);
+    }
+  };
 
-    // Second useEffect to get appointments when professionalId changes
-    useEffect(() => {
-        if (professionalId) {
-            handleAppointments(professionalId);
-        }
-    }, [professionalId]);
+  // First useEffect to get professional ID
+  useEffect(() => {
+    handleGetProfessionalID();
+  }, []);
 
-    return (
-        <div className="bg-white shadow rounded-lg p-6">
-            <Header title="Appointments" />
-            <div className="p-4">
-                <DataTable 
-                    columns={columns}
-                    data={appointments}
-                />
-            </div>
-        </div>
-    );
+  // Second useEffect to get appointments when professionalId changes
+  useEffect(() => {
+    if (professionalId) {
+      handleAppointments(professionalId);
+    }
+  }, [professionalId]);
+
+  return (
+    <div className="bg-white shadow rounded-lg p-6">
+      <Header title="Appointments" />
+      <div className="p-4">
+        <DataTable 
+          columns={columns}
+          data={appointments}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default AppointmentsProfessionals;

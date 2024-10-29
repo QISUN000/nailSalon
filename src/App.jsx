@@ -109,7 +109,7 @@ function App() {
               <p data-aos="fade-up" data-aos-delay="250" data-aos-anchor="#hero-section" className="text-2xl text-white mb-8">Expert Nail Care and Exquisite Cocktails in one Place</p>
             </div>
             <RouterLink 
-  to="/booking" 
+  to="/booking"  data-aos="fade-up" data-aos-delay="350"
   className="flex items-center justify-center border-white border-solid border-2 h-20 text-2xl text-white px-10 py-3 rounded-full 
     hover:bg-white hover:text-black hover:scale-105
     transition-all duration-300 ease-in-out"

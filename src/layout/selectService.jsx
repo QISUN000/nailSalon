@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import Header from "../components/Header"
+import React, { useEffect, useState } from 'react';
+import Header from "../components/Header";
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../BookingContext';
-import ServiceTabs from "../components/ServiceTabs"
-import ServiceList from "../components/ServiceList"
-import SidePanel from "../components/SidePanel"
-import axios from "axios"
-import Image2 from '../assets/image2.png'
+import ServiceTabs from "../components/ServiceTabs";
+import ServiceList from "../components/ServiceList";
+import SidePanel from "../components/SidePanel";
+import { getCategories } from '../api/api';
+import Image2 from '../assets/image2.png';
 
 const SelectService = () => {
   const navigate = useNavigate();
   const { selectedServices, setSelectedServices } = useBooking();
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState('');
+  
   const salonInfo = {
     name: "Bicolor Los Feliz",
     image: Image2,
@@ -22,20 +23,20 @@ const SelectService = () => {
   };
 
   useEffect(() => {
-    loadUsers();
+    loadCategories();
   }, []);
 
-  const loadUsers = async () => {
+  const loadCategories = async () => {
     try {
-      const result = await axios.get("http://localhost:8080/api/categories");
-      const categoriesData = result.data;
+      const categoriesData = await getCategories();
       console.log(categoriesData);
       setCategories(categoriesData);
       setActiveCategory(categoriesData[0]?.name || '');
     } catch (error) {
       console.error("Error loading categories:", error);
+      // You might want to add error handling UI here
     }
-  }
+  };
 
   const handleServiceSelect = (service) => {
     setSelectedServices(prevSelected => {
@@ -85,7 +86,7 @@ const SelectService = () => {
         </aside>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default SelectService;

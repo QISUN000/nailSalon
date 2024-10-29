@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Header from "../components/Header"
-import SidePanel from "../components/SidePanel"
-import ProfessionalCard from "../components/professionalCard"
-import axios from "axios"
-import Image2 from '../assets/image2.png'
+import React, { useEffect, useState } from 'react';
+import Header from "../components/Header";
+import SidePanel from "../components/SidePanel";
+import ProfessionalCard from "../components/professionalCard";
+import Image2 from '../assets/image2.png';
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../BookingContext';
+import { getAllProfessionals } from '../api/api';
 
 const Professionals = () => {
   const navigate = useNavigate();
@@ -21,14 +21,18 @@ const Professionals = () => {
   };
 
   useEffect(() => {
-    loadUsers();
+    loadProfessionals();
   }, []);
 
-  const loadUsers = async () => {
-    const result = await axios.get("http://localhost:8080/api/professionals");
-    const professionalsData = result.data;
-    setProfessionals(professionalsData);
-  }
+  const loadProfessionals = async () => {
+    try {
+      const professionalsData = await getAllProfessionals();
+      setProfessionals(professionalsData);
+    } catch (error) {
+      console.error('Error loading professionals:', error);
+      // You might want to add error handling UI here
+    }
+  };
 
   const handleProfessionalSelect = (professional) => {
     setSelectedProfessional(professional);
@@ -45,7 +49,6 @@ const Professionals = () => {
   }, [professionals, selectedProfessional, setSelectedProfessional]);
 
   return (
-
     <div>
       <Header
         title="Professionals"
@@ -81,7 +84,7 @@ const Professionals = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Professionals
+export default Professionals;

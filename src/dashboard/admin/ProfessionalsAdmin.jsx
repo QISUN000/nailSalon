@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../ComponentHeader'
-import DataTable from '../DataTable'
-import axios from 'axios';
+import Header from '../ComponentHeader';
+import DataTable from '../DataTable';
+import { getAllProfessionals, deleteProfessional } from '../../api/api.js';
 import { toast } from 'react-toastify';
 import AddProfessional from '../AddProfessional';
 import EditProfessional from '../EditProfessional';
@@ -11,7 +11,6 @@ const ProfessionalsPage = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProfessionalId, setSelectedProfessionalId] = useState(null);
-  // Add these new states for confirmation modal
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [professionalToDelete, setProfessionalToDelete] = useState(null);
 
@@ -26,9 +25,8 @@ const ProfessionalsPage = () => {
 
   const getProfessionals = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/professionals');
-
-      const formattedProfessionals = response.data.map(e => ({
+      const data = await getAllProfessionals();
+      const formattedProfessionals = data.map(e => ({
         id: e.id,
         name: e.name,
         price: e.price ?? 0,
@@ -36,7 +34,6 @@ const ProfessionalsPage = () => {
         role: e.role ?? '-',
         imageUrl: e.imageUrl ?? null
       }));
-
       setProfessionals(formattedProfessionals);
     } catch (error) {
       console.log('error fetching Professionals', error);
@@ -57,22 +54,16 @@ const ProfessionalsPage = () => {
     setShowEditModal(true);
   };
 
-  // Modified delete handler to show confirmation modal
   const handleDelete = (id) => {
     setProfessionalToDelete(id);
     setIsConfirmOpen(true);
   };
 
-  // New confirm delete handler
   const confirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8080/api/professionals/${professionalToDelete}`, {
-        headers: {
-          'Authorization': `${localStorage.getItem('token')}`
-        }
-      });
+      await deleteProfessional(professionalToDelete);
       toast.success('Professional deleted successfully');
-      getProfessionals(); // Refresh the list
+      getProfessionals();
     } catch (error) {
       console.error('Error deleting professional:', error);
       toast.error('Failed to delete professional');

@@ -194,5 +194,143 @@ export const getUserName = async () => {
     }
 };
 
+export const getAllAppointments = async () => {
+    try {
+      const response = await api.get('/bookings/all');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+      throw error;
+    }
+  };
+  
+  export const cancelAppointment = async (id) => {
+    try {
+      await api.delete(`/bookings/${id}`);
+      return true;
+    } catch (error) {
+      console.error('Error canceling appointment:', error);
+      throw error;
+    }
+  };
 
+  export const getAllProfessionals = async () => {
+    try {
+      const response = await api.get('/professionals');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching professionals:', error);
+      throw error;
+    }
+  };
+  
+  export const deleteProfessional = async (id) => {
+    try {
+      await api.delete(`/professionals/${id}`);
+      return true;
+    } catch (error) {
+      console.error('Error deleting professional:', error);
+      throw error;
+    }
+  };
+
+  export const getMyAppointments = async () => {
+    try {
+      const response = await api.get('/bookings/my-bookings');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching customer appointments:', error);
+      throw error;
+    }
+  };
+
+  export const getProfessionalId = async () => {
+    try {
+      const response = await api.get('/professionals/user');
+      return response.data.id;
+    } catch (error) {
+      console.error('Error fetching professional ID:', error);
+      throw error;
+    }
+  };
+  
+  export const getProfessionalAppointments = async (professionalId) => {
+    try {
+      const response = await api.get(`/bookings/professional/${professionalId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching professional appointments:', error);
+      throw error;
+    }
+  };
+
+  export const createProfessional = async (professionalData) => {
+    try {
+      const response = await api.post('/professionals', professionalData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating professional:', error);
+      throw error;
+    }
+  };
+
+  export const getAppointmentDetails = async (appointmentId) => {
+    try {
+      const response = await api.get(`/bookings/${appointmentId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching appointment details:', error);
+      throw error;
+    }
+  };
+  
+  export const getServiceCategories = async () => {
+    try {
+      const response = await api.get('/categories');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching service categories:', error);
+      throw error;
+    }
+  };
+  
+  export const updateAppointment = async (appointmentId, updateData) => {
+    try {
+      const response = await api.put(`/bookings/${appointmentId}`, updateData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating appointment:', error);
+      throw error;
+    }
+  };
+  
+  export const getProfessionalById = async (professionalId) => {
+    try {
+      const response = await api.get(`/professionals/${professionalId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching professional details:', error);
+      throw error;
+    }
+  };
+  
+  export const updateProfessional = async (professionalId, professionalData) => {
+    try {
+      const response = await api.put(`/professionals/${professionalId}`, professionalData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating professional:', error);
+      throw error;
+    }
+  };
+
+  export const getCategories = async () => {
+    try {
+      const response = await api.get('/categories');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      throw error;
+    }
+  };
 export default api;
