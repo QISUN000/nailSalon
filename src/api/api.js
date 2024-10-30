@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // const API_URL = 'http://localhost:8080/api';
-const API_URL = 'https://nailsalon1028-bqbjfzcredgdche9.canadacentral-01.azurewebsites.net/api';
+export const API_URL = 'https://nailsalon1028-bqbjfzcredgdche9.canadacentral-01.azurewebsites.net/api';
 export const api = axios.create({
     baseURL: API_URL,
     headers: {
