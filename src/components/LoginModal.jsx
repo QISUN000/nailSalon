@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin } from '@react-oauth/google';
-import { checkEmail, login, register, googleLogin, setAuthToken,getUserName } from '../api/api';
+import { checkEmail, login, register, googleLogin, setAuthToken, getUserName } from '../api/api';
 
 const LoginModal = ({ isOpen, onClose, onLogin }) => {
     const [email, setEmail] = useState('');
@@ -21,14 +21,14 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
             // Store values before the onLogin call
             const currentToken = token;
             const currentRole = role;
-            
+
             console.log('Before onLogin - Token:', currentToken, 'Role:', currentRole);
-            
+
             // Call onLogin and await if it returns a promise
             // await Promise.resolve(onLogin('password', null, currentToken, currentRole));
-            await Promise.resolve(onLogin( currentToken, currentRole));
+            await Promise.resolve(onLogin(currentToken, currentRole));
             console.log('After onLogin - Token:', currentToken, 'Role:', currentRole);
-            
+
             // Optionally verify the login state here
             // You could add a callback prop to confirm the login was successful
         } catch (error) {
@@ -54,8 +54,8 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         try {
             const data = await login(email, password);
             console.log('Login response data:', data);
-          
-          
+
+
             handleSuccessfulLogin(data.token, data.role);
         } catch (error) {
             setError('Invalid email or password. Please try again.');
@@ -67,16 +67,16 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         setError('');
         try {
             console.log('Signing up with:', { email, name });
-            
+
             // First register the user
             const registerResponse = await register(email, password, name);
             console.log('Register response:', registerResponse);
-    
+
             if (registerResponse.success) {
                 // After successful registration, perform login
                 const loginData = await login(email, password);
                 console.log('Login response after registration:', loginData);
-    
+
                 if (loginData.token) {
                     handleSuccessfulLogin(loginData.token, loginData.role);
                 } else {
@@ -95,7 +95,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         try {
             const decoded = jwtDecode(credentialResponse.credential);
             const data = await googleLogin(credentialResponse.credential);
-            handleSuccessfulLogin( data.accessToken, 'CUSTOMER');
+            handleSuccessfulLogin(data.accessToken, 'CUSTOMER');
         } catch (error) {
             setError('Error with Google login. Please try again.');
         }
@@ -151,7 +151,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
     const renderSignUpStep = () => (
         <form onSubmit={handleSignUp}>
-             <div className="mb-4 flex items-center">
+            <div className="mb-4 flex items-center">
                 <button
                     type="button"
                     onClick={handleBack}
@@ -199,13 +199,15 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
                 {error && <p className="text-red-500 mb-4">{error}</p>}
 
-                <GoogleLogin
-                    width="400"
-                    onSuccess={handleGoogleLogin}
-                    onError={() => {
-                        setError('Google Login Failed');
-                    }}
-                />
+               
+    <GoogleLogin
+        width={300}
+        onSuccess={handleGoogleLogin}
+        onError={() => {
+            setError('Google Login Failed');
+        }}
+    />
+
 
                 <div className="relative my-4">
                     <div className="absolute inset-0 flex items-center">

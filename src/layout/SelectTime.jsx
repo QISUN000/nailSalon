@@ -137,14 +137,14 @@ const SelectTime = () => {
     });
 
     return (
-        <div>
+        <div className="relative min-h-screen pb-[200px] md:pb-0">
             <Header
                 title="Select time"
                 breadcrumbs={['Services', 'Professional', 'Time', 'Confirm']}
                 selectedCrumbs={['Services', 'Professional', 'Time']}
             />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div className="flex gap-6">
+                <div className="md:flex md:gap-6">
                     <main className="flex-grow">
                         <div className="flex items-center mb-4">
                             <img
@@ -167,16 +167,18 @@ const SelectTime = () => {
                             )
                         )}
                     </main>
-                    <aside className="w-80">
-                        <SidePanel
-                            salonInfo={salonInfo}
-                            selectedServices={selectedServices}
-                            selectedProfessional={selectedProfessional}
-                            selectedDate={selectedDate}
-                            selectedTime={selectedTime}
-                            onContinue={handleContinue}
-                            currentPage="selectTime"
-                        />
+                    <aside className="md:w-80 fixed bottom-0 left-0 right-0 md:relative md:bottom-auto md:left-auto md:right-auto bg-white">
+                        <div className="md:sticky md:top-4">
+                            <SidePanel
+                                salonInfo={salonInfo}
+                                selectedServices={selectedServices}
+                                selectedProfessional={selectedProfessional}
+                                selectedDate={selectedDate}
+                                selectedTime={selectedTime}
+                                onContinue={handleContinue}
+                                currentPage="selectTime"
+                            />
+                        </div>
                     </aside>
                 </div>
             </div>

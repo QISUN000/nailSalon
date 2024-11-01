@@ -22,7 +22,7 @@ const SidePanel = ({ salonInfo, selectedServices, selectedProfessional, selected
 
   return (
     <div className="bg-white shadow-md md:rounded-lg overflow-hidden">
-      <div className="p-4">
+      <div className="p-4 hidden md:block">
         <div className="flex items-center mb-4">
           <img src={salonInfo.image} alt={salonInfo.name} className="w-12 h-12 rounded-full mr-3" />
           <div>
