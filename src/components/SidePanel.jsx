@@ -1,7 +1,7 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import { format } from 'date-fns';
-import { API_URL } from '../api/api';
+import { API_URL_images } from '../api/api';
 
 const SidePanel = ({ salonInfo, selectedServices, selectedProfessional, selectedDate, selectedTime, onContinue, currentPage }) => {
   const servicePrice = selectedServices.reduce((sum, service) => sum + service.price, 0);
@@ -60,7 +60,7 @@ const SidePanel = ({ salonInfo, selectedServices, selectedProfessional, selected
             <h4 className="font-semibold mb-2">Selected Professional</h4>
             <div className="flex items-center">
               <img 
-                src={API_URL + selectedProfessional.imageUrl}
+                src={API_URL_images + selectedProfessional.imageUrl}
                 alt={selectedProfessional.name} 
                 className="w-10 h-10 rounded-full object-cover mr-2"
               />

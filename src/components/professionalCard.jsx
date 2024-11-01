@@ -1,5 +1,5 @@
 import React from 'react';
-import { API_URL } from '../api/api';
+import { API_URL_images } from '../api/api';
 
 const ProfessionalCard = ({ professional, isSelected, onSelect }) => {
   return (
@@ -11,7 +11,7 @@ const ProfessionalCard = ({ professional, isSelected, onSelect }) => {
     >
       <div className="flex flex-col items-center">
         <img 
-         src={API_URL + professional.imageUrl} 
+         src={API_URL_images + professional.imageUrl} 
           alt={professional.name} 
           className="w-24 h-24 rounded-full object-cover mb-2"
         />

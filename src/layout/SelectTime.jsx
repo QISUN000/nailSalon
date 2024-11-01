@@ -10,7 +10,7 @@ import LoginModal from '../components/LoginModal';
 import Image2 from '../assets/image2.png';
 import { createBooking,  setAuthToken,getRoleBasedPath } from '../api/api';
 import { toast } from 'react-toastify';
-import { API_URL } from '../api/api';
+import { API_URL_images } from '../api/api';
 
 const SelectTime = () => {
     const navigate = useNavigate();
@@ -148,7 +148,7 @@ const SelectTime = () => {
                     <main className="flex-grow">
                         <div className="flex items-center mb-4">
                             <img
-                                src={API_URL + selectedProfessional.imageUrl}
+                                src={API_URL_images + selectedProfessional.imageUrl}
                                 alt={selectedProfessional.name}
                                 className="w-10 h-10 rounded-full mr-2"
                             />
