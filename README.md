@@ -183,7 +183,6 @@ yarn preview
 
 ## Acknowledgments
 - Create by QI SUN
-- Special thanks to all contributors
 
 ## Support
 For support, please open an issue in the repository or contact lukesun2023@gmail.com.
