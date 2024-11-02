@@ -5,7 +5,7 @@ This Nail Salon Booking System is a personal project I created to support my par
 
 ## Live Demo
 🚀 Visit the Live Site 
-https://nail-salon-jqwxrhg2r-qis-projects-779294eb.vercel.app/
+https://nail-salon-navy.vercel.app/
 
 ## Features
 - **Client Portal**
