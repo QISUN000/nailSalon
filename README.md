@@ -3,8 +3,7 @@
 ## Overview
 This Nail Salon Booking System is a personal project I created to support my partner, a talented nail technician, in her dream of opening her own nail studio. I wanted to build something that could help her manage appointments and streamline her future business operations, making it easier for clients to connect with her services. This app serves as an all-in-one booking platform where clients can browse the studio's portfolio, book services, and manage their appointments after logging in. Built with React, Spring Boot, and MySQL.
 
-
-##Live Demo
+## Live Demo
 🚀 Visit the Live Site 
 https://qisun.lol/
 
