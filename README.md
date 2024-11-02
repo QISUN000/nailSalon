@@ -105,10 +105,47 @@ src/
 - Maintain component isolation and reusability
 
 ### Authentication
-The application uses Google OAuth for authentication:
-1. Sign in with Google button implementation
-2. JWT token management for session handling
-3. Protected routes for authenticated users
+The application provides secure user authentication with multiple sign-in options:
+Sign-in Methods
+
+Email/Password Authentication
+
+Traditional email and password registration
+Secure password requirements
+Password reset functionality
+
+
+Google OAuth
+
+One-click Google sign-in
+Secure OAuth 2.0 implementation
+Automatic profile information import
+
+
+
+Security Features
+
+JWT (JSON Web Token) based authentication
+Secure token storage and management
+Automatic session timeout handling
+Protected API routes
+CORS protection
+XSS protection
+CSRF protection
+
+Access Control
+
+Role-based authorization (Client/Admin/Professional)
+Protected routes based on user roles
+Automatic redirect for unauthorized access
+Session management and validation
+
+Token Management
+
+Secure JWT storage
+Automatic token inclusion in API requests
+Token expiration handling
+Session persistence across page refreshes
 
 ### API Integration
 - Axios is used for API calls
