@@ -167,7 +167,7 @@ const SelectTime = () => {
                             )
                         )}
                     </main>
-                    <aside className="md:w-80 fixed bottom-0 left-0 right-0 md:relative md:bottom-auto md:left-auto md:right-auto bg-white">
+                    <aside className="md:w-80 fixed bottom-0 left-0 right-0 md:relative md:bottom-auto md:left-auto md:right-auto">
                         <div className="md:sticky md:top-4">
                             <SidePanel
                                 salonInfo={salonInfo}
