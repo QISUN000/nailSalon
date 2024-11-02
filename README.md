@@ -86,14 +86,44 @@ yarn dev
 ## Project Structure
 ```
 src/
-├── components/         # Reusable UI components
-├── pages/             # Page components/routes
-├── services/          # API service calls
-├── hooks/             # Custom React hooks
-├── utils/             # Utility functions
-├── assets/            # Static assets
-├── styles/            # Global styles
-└── App.jsx            # Root component
+├── api/
+│   └── api.js                 # API service configuration
+├── assets/                    # Static assets and images
+├── components/               
+│   ├── Calendar.jsx           # Appointment calendar component
+│   ├── carousel.jsx           # Image carousel for portfolio
+│   ├── FullyBooked.jsx        # Fully booked date indicator
+│   ├── Header.jsx             # Main navigation header
+│   ├── LoginModal.jsx         # Authentication modal
+│   ├── professionalCard.jsx   # Staff profile card
+│   ├── ProtectedRoute.jsx     # Route protection wrapper
+│   ├── ServiceCard.jsx        # Service display card
+│   ├── ServiceList.jsx        # Services listing
+│   ├── ServiceTabs.jsx        # Service category tabs
+│   ├── SidePanel.jsx          # Side navigation panel
+│   └── TimeSlots.jsx          # Appointment time selector
+├── dashboard/                 # Dashboard components
+│   ├── admin/                 # Admin-specific components
+│   ├── customers/             # Customer management
+│   ├── professionals/         # Staff management
+│   ├── AddProfessional.jsx    # Add new staff form
+│   ├── Button.jsx             # Reusable button component
+│   ├── ComponentHeader.jsx    # Dashboard component headers
+│   ├── ConfirmationModal.jsx  # Action confirmation modal
+│   ├── DataTable.jsx          # Data display table
+│   ├── EditAppointment.jsx    # Appointment editor
+│   ├── EditProfessional.jsx   # Staff profile editor
+│   ├── Sidebar.jsx           # Dashboard sidebar
+│   └── UnauthorizedAccess.jsx # Access denied component
+├── layout/
+│   ├── layout.jsx            # Main layout wrapper
+│   ├── professionals.jsx     # Staff layout
+│   ├── selectService.jsx     # Service selection layout
+│   └── SelectTime.jsx        # Time selection layout
+├── App.css                   # Global styles
+├── App.jsx                   # Root component
+├── BookingContext.jsx        # Booking state management
+└── main.jsx                  # Application entry point
 ```
 
 ## Development Guidelines
