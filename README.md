@@ -7,10 +7,6 @@ This Nail Salon Booking System is a personal project I created to support my par
 🚀 Visit the Live Site 
 https://nail-salon-navy.vercel.app/
 
-## Demo Video
-<video src="https://www.youtube.com/watch?v=X13G5j5pqNE" controls="controls" style="max-width: 730px;">
-</video>
-
 ## Features
 - **Client Portal**
   - Browse studio's work portfolio
