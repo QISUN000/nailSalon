@@ -126,7 +126,7 @@ export const createBooking = async (bookingData) => {
             throw new Error('Invalid booking data format');
         }
 
-        // The data is already properly formatted from handleBookingCreation
+   
         const response = await api.post('/bookings', bookingData);
         console.log('After booking - role:', localStorage.getItem('userRole'))
         console.log('Booking response:', response.data);
@@ -145,7 +145,7 @@ export const createBooking = async (bookingData) => {
     }
 };
 
-// Rest of your API functions...
+
 export const checkEmail = async (email) => {
     try {
         const response = await api.post('/auth/check-email', { email });
